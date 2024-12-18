@@ -5,7 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
-syn.queue_on_teleport([[
+queue_on_teleport([[
     wait(1)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/sxlent404/temp/main/noUI.lua"))()
 ]])
