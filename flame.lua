@@ -37,25 +37,28 @@ function Library:CreateWindow()
    UICorner.CornerRadius = UDim.new(0, 12)
    UICorner.Parent = MainContent
    
-   local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
-   UIAspectRatioConstraint.AspectRatio = 1.50685
-   UIAspectRatioConstraint.Parent = MainContent
-
-   local TabScrollingFrame = Instance.new("ScrollingFrame")
-   TabScrollingFrame.BackgroundTransparency = 1
-   TabScrollingFrame.Size = UDim2.new(1, 0, 0.1, 0)
-   TabScrollingFrame.Position = UDim2.new(0, 0, 0.027, 0)
-   TabScrollingFrame.ScrollBarThickness = 0
-   TabScrollingFrame.Parent = MainContent
+   local TabScroll = Instance.new("ScrollingFrame")
+   TabScroll.Size = UDim2.new(1, 0, 0.1, 0)
+   TabScroll.Position = UDim2.new(0, 0, 0.027, 0)
+   TabScroll.BackgroundTransparency = 1
+   TabScroll.ScrollBarThickness = 0
+   TabScroll.Parent = MainContent
    
-   local TabUIListLayout = Instance.new("UIListLayout")
-   TabUIListLayout.FillDirection = Enum.FillDirection.Horizontal
-   TabUIListLayout.Padding = UDim.new(0.015, 0)
-   TabUIListLayout.Parent = TabScrollingFrame
+   local TabLayout = Instance.new("UIListLayout")
+   TabLayout.FillDirection = Enum.FillDirection.Horizontal
+   TabLayout.Padding = UDim.new(0.01, 0)
+   TabLayout.Parent = TabScroll
    
-   local ItemContainer = Instance.new("Folder")
-   ItemContainer.Name = "Items"
-   ItemContainer.Parent = MainContent
+   local ItemScroll = Instance.new("ScrollingFrame")
+   ItemScroll.Size = UDim2.new(1, 0, 0.858, 0)
+   ItemScroll.Position = UDim2.new(0, 0, 0.142, 0)
+   ItemScroll.BackgroundTransparency = 1
+   ItemScroll.ScrollBarThickness = 4
+   ItemScroll.Parent = MainContent
+   
+   local ItemLayout = Instance.new("UIListLayout")
+   ItemLayout.Padding = UDim.new(0.01, 0)
+   ItemLayout.Parent = ItemScroll
    
    local UserInfo = Instance.new("Frame")
    UserInfo.BorderSizePixel = 0
@@ -144,6 +147,40 @@ function Library:CreateWindow()
    Title.Position = UDim2.new(0.05548, 0, 0.0274, 0)
    Title.Parent = TitleBar
    
+   local MinimizeBtn = Instance.new("TextButton")
+   MinimizeBtn.Size = UDim2.new(0.03, 0, 0.8, 0)
+   MinimizeBtn.Position = UDim2.new(0.89, 0, 0.1, 0)
+   MinimizeBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+   MinimizeBtn.Text = "-"
+   MinimizeBtn.TextSize = 20
+   MinimizeBtn.Parent = TitleBar
+   
+   local CloseBtn = Instance.new("TextButton")
+   CloseBtn.Size = UDim2.new(0.03, 0, 0.8, 0)
+   CloseBtn.Position = UDim2.new(0.93, 0, 0.1, 0)  
+   CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+   CloseBtn.Text = "X"
+   CloseBtn.TextSize = 20
+   CloseBtn.Parent = TitleBar
+   
+   MinimizeBtn.MouseButton1Click:Connect(function()
+       MainContent.Visible = not MainContent.Visible
+       UserInfo.Visible = not UserInfo.Visible
+   end)
+   
+   local Visible = true
+   CloseBtn.MouseButton1Click:Connect(function()
+       Visible = false
+       ScreenGui.Enabled = false
+   end)
+   
+   UIS.InputBegan:Connect(function(input)
+       if input.KeyCode == Enum.KeyCode.RightShift then
+           Visible = not Visible
+           ScreenGui.Enabled = Visible
+       end
+   end)
+   
    local function CreateDrag(bar)
        local dragToggle, dragSpeed, dragStart, startPos = nil, 0.25, nil, nil
        
@@ -191,7 +228,7 @@ function Library:CreateWindow()
        TabButton.Size = UDim2.new(0.12727, 0, 0.8, 0)
        TabButton.TextColor3 = Color3.fromRGB(0, 0, 0)
        TabButton.Text = text
-       TabButton.Parent = TabScrollingFrame
+       TabButton.Parent = TabScroll
        
        local TabButtonCorner = Instance.new("UICorner")
        TabButtonCorner.CornerRadius = UDim.new(0, 999)
@@ -204,42 +241,36 @@ function Library:CreateWindow()
        TabStroke.Transparency = 1
        TabStroke.Parent = TabButton
        
-       local TabButtonAspect = Instance.new("UIAspectRatioConstraint")
-       TabButtonAspect.AspectRatio = 2.33333
-       TabButtonAspect.Parent = TabButton
-       
-       local ScrollingFrame = Instance.new("ScrollingFrame")
-       ScrollingFrame.BackgroundTransparency = 1
-       ScrollingFrame.Size = UDim2.new(1, 0, 0.858, 0)
-       ScrollingFrame.Position = UDim2.new(0, 0, 0.142, 0)
-       ScrollingFrame.ScrollBarThickness = 2
-       ScrollingFrame.Visible = false
-       ScrollingFrame.Parent = ItemContainer
-       
-       local UIListLayout = Instance.new("UIListLayout")
-       UIListLayout.Padding = UDim.new(0.01, 0)
-       UIListLayout.Parent = ScrollingFrame
+       local TabFolder = Instance.new("Folder")
+       TabFolder.Parent = ItemScroll
        
        if #GUI.Tabs == 0 then
            TabStroke.Transparency = 0
-           ScrollingFrame.Visible = true
-           GUI.CurrentTab = ScrollingFrame
+           TabFolder.Visible = true
+       else
+           TabFolder.Visible = false
        end
        
        TabButton.MouseButton1Click:Connect(function()
-           if GUI.CurrentTab then
-               GUI.CurrentTab.Visible = false
-           end
-           ScrollingFrame.Visible = true
-           GUI.CurrentTab = ScrollingFrame
-           
-           for _, tabBtn in pairs(TabScrollingFrame:GetChildren()) do
+           for _, tabBtn in pairs(TabScroll:GetChildren()) do
                if tabBtn:IsA("TextButton") then
-                   tabBtn.UIStroke.Transparency = 1
+                   TweenService:Create(tabBtn.UIStroke, TweenInfo.new(0.1), {
+                       Transparency = 1
+                   }):Play()
                end
            end
            
-           TabStroke.Transparency = 0
+           for _, folder in pairs(ItemScroll:GetChildren()) do
+               if folder:IsA("Folder") then
+                   folder.Visible = false
+               end
+           end
+           
+           TweenService:Create(TabStroke, TweenInfo.new(0.1), {
+               Transparency = 0
+           }):Play()
+           
+           TabFolder.Visible = true
        end)
        
        function tab:CreateToggle(text, callback)
@@ -249,23 +280,10 @@ function Library:CreateWindow()
            ToggleFrame.BorderSizePixel = 0
            ToggleFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
            ToggleFrame.Size = UDim2.new(0.96545, 0, 0.10959, 0)
-           ToggleFrame.Parent = ScrollingFrame
+           ToggleFrame.Parent = TabFolder
            
            local ToggleCorner = Instance.new("UICorner")
            ToggleCorner.Parent = ToggleFrame
-           
-           if type(text) == "table" and text.Dot then
-               local Status = Instance.new("Frame")
-               Status.BorderSizePixel = 0
-               Status.BackgroundColor3 = text.Dot == "New" and Color3.fromRGB(0, 255, 128) or Color3.fromRGB(0, 255, 255)
-               Status.Size = UDim2.new(0.01883, 0, 0.25, 0)
-               Status.Position = UDim2.new(0.845, 0, 0.4, 0)
-               Status.Parent = ToggleFrame
-               
-               local StatusCorner = Instance.new("UICorner")
-               StatusCorner.CornerRadius = UDim.new(0, 999)
-               StatusCorner.Parent = Status
-           end
            
            local ToggleLabel = Instance.new("TextLabel")
            ToggleLabel.TextWrapped = true
@@ -275,13 +293,13 @@ function Library:CreateWindow()
            ToggleLabel.TextScaled = true
            ToggleLabel.FontFace = Font.new("rbxasset://fonts/families/DenkOne.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
            ToggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-           ToggleLabel.BackgroundTransparency = 1
-           ToggleLabel.Size = UDim2.new(0.83427, 0, 1, 0)
-           ToggleLabel.Text = type(text) == "table" and text.Text or text
-           ToggleLabel.Position = UDim2.new(0.01318, 0, 0, 0)
-           ToggleLabel.Parent = ToggleFrame
-           
-           local ToggleButton = Instance.new("Frame")
+ToggleLabel.BackgroundTransparency = 1
+ToggleLabel.Size = UDim2.new(0.83427, 0, 1, 0)
+ToggleLabel.Text = text
+ToggleLabel.Position = UDim2.new(0.01318, 0, 0, 0)
+ToggleLabel.Parent = ToggleFrame
+
+local ToggleButton = Instance.new("Frame")
 ToggleButton.BorderSizePixel = 0
 ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 83, 83)
 ToggleButton.Size = UDim2.new(0.12241, 0, 0.76, 0)
@@ -327,20 +345,7 @@ function tab:CreateButton(text, callback)
    ButtonFrame.BorderSizePixel = 0
    ButtonFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
    ButtonFrame.Size = UDim2.new(0.96545, 0, 0.10959, 0)
-   ButtonFrame.Parent = ScrollingFrame
-   
-   if type(text) == "table" and text.Dot then
-       local Status = Instance.new("Frame")
-       Status.BorderSizePixel = 0
-       Status.BackgroundColor3 = text.Dot == "New" and Color3.fromRGB(0, 255, 128) or Color3.fromRGB(0, 255, 255)
-       Status.Size = UDim2.new(0.01883, 0, 0.25, 0)
-       Status.Position = UDim2.new(0.845, 0, 0.4, 0)
-       Status.Parent = ButtonFrame
-       
-       local StatusCorner = Instance.new("UICorner")
-       StatusCorner.CornerRadius = UDim.new(0, 999)
-       StatusCorner.Parent = Status
-   end
+   ButtonFrame.Parent = TabFolder
    
    local ButtonCorner = Instance.new("UICorner")
    ButtonCorner.Parent = ButtonFrame
@@ -350,7 +355,7 @@ function tab:CreateButton(text, callback)
    ButtonLabel.Position = UDim2.new(0.013, 0, 0, 0)
    ButtonLabel.Size = UDim2.new(0.974, 0, 1, 0)
    ButtonLabel.Font = Enum.Font.DenkOne
-   ButtonLabel.Text = type(text) == "table" and text.Text or text
+   ButtonLabel.Text = text
    ButtonLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
    ButtonLabel.TextScaled = true
    ButtonLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -369,20 +374,7 @@ function tab:CreateKeybind(text, default, callback)
    KeybindFrame.BorderSizePixel = 0
    KeybindFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
    KeybindFrame.Size = UDim2.new(0.96545, 0, 0.10959, 0)
-   KeybindFrame.Parent = ScrollingFrame
-   
-   if type(text) == "table" and text.Dot then
-       local Status = Instance.new("Frame")
-       Status.BorderSizePixel = 0
-       Status.BackgroundColor3 = text.Dot == "New" and Color3.fromRGB(0, 255, 128) or Color3.fromRGB(0, 255, 255)
-       Status.Size = UDim2.new(0.01883, 0, 0.25, 0)
-       Status.Position = UDim2.new(0.845, 0, 0.4, 0)
-       Status.Parent = KeybindFrame
-       
-       local StatusCorner = Instance.new("UICorner")
-       StatusCorner.CornerRadius = UDim.new(0, 999)
-       StatusCorner.Parent = Status
-   end
+   KeybindFrame.Parent = TabFolder
    
    local KeybindCorner = Instance.new("UICorner")
    KeybindCorner.Parent = KeybindFrame
@@ -392,7 +384,7 @@ function tab:CreateKeybind(text, default, callback)
    KeybindLabel.Position = UDim2.new(0.013, 0, 0, 0)
    KeybindLabel.Size = UDim2.new(0.834, 0, 1, 0)
    KeybindLabel.Font = Enum.Font.DenkOne
-   KeybindLabel.Text = type(text) == "table" and text.Text or text
+   KeybindLabel.Text = text
    KeybindLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
    KeybindLabel.TextScaled = true
    KeybindLabel.TextXAlignment = Enum.TextXAlignment.Left
