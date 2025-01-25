@@ -298,7 +298,7 @@ function tab:CreateToggle(text, callback)
   ToggleFrame.BorderSizePixel = 0
   ToggleFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
   ToggleFrame.Size = UDim2.new(0.96545, 0, 0.10959, 0)
-  ToggleFrame.Position = UDim2.new(0.01636, 0, 0.14247 + (#tab.Items * 0.127), 0)
+  ToggleFrame.Position = UDim2.new(0.01636, 0, 0.05 + (#tab.Items * 0.127), 0)
   ToggleFrame.Parent = TabContent
   
   local ToggleCorner = Instance.new("UICorner")
@@ -364,7 +364,7 @@ function tab:CreateButton(text, callback)
   ButtonFrame.BorderSizePixel = 0
   ButtonFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
   ButtonFrame.Size = UDim2.new(0.96545, 0, 0.10959, 0)
-  ButtonFrame.Position = UDim2.new(0.01636, 0, 0.14247 + (#tab.Items * 0.127), 0)
+  ButtonFrame.Position = UDim2.new(0.01636, 0, 0.05 + (#tab.Items * 0.127), 0)
   ButtonFrame.Parent = TabContent
   
   local ButtonCorner = Instance.new("UICorner")
@@ -394,7 +394,7 @@ function tab:CreateKeybind(text, default, callback)
   KeybindFrame.BorderSizePixel = 0
   KeybindFrame.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
   KeybindFrame.Size = UDim2.new(0.96545, 0, 0.10959, 0)
-  KeybindFrame.Position = UDim2.new(0.01636, 0, 0.14247 + (#tab.Items * 0.127), 0)
+  KeybindFrame.Position = UDim2.new(0.01636, 0, 0.05 + (#tab.Items * 0.127), 0)
   KeybindFrame.Parent = TabContent
   
   local KeybindCorner = Instance.new("UICorner")
