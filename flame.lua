@@ -249,13 +249,17 @@ function GUI:CreateTab(text)
    TabFolder.Name = text .. "Tab"
    TabFolder.Parent = ItemContainer
    
-   if GUI.CurrentTab == nil then
-       GUI.CurrentTab = tab
-       TabStroke.Transparency = 0
-       TabFolder.Visible = true
-   else
-       TabFolder.Visible = false
-   end
+if #GUI.Tabs == 0 then
+    GUI.CurrentTab = tab
+    TabStroke.Transparency = 0
+    for _, obj in pairs(TabFolder:GetChildren()) do
+        obj.Visible = true
+    end
+else
+    for _, obj in pairs(TabFolder:GetChildren()) do
+        obj.Visible = false
+    end
+end
    
    TabButton.MouseButton1Click:Connect(function()
        if GUI.CurrentTab ~= tab then
@@ -265,7 +269,9 @@ function GUI:CreateTab(text)
                    prevFolder.Visible = false
                end
            end
-           TabFolder.Visible = true
+           for _, obj in pairs(TabFolder:GetChildren()) do
+    obj.Visible = true
+end
            GUI.CurrentTab = tab
            for _, tabBtn in pairs(TabContainer:GetChildren()) do
                if tabBtn:IsA("TextButton") then
