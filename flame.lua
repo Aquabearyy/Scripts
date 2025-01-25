@@ -261,26 +261,22 @@ else
     end
 end
    
-   TabButton.MouseButton1Click:Connect(function()
-       if GUI.CurrentTab ~= tab then
-           if GUI.CurrentTab then
-               local prevFolder = ItemContainer:FindFirstChild(GUI.CurrentTab.Text .. "Tab")
-               if prevFolder then
-                   prevFolder.Visible = false
-               end
-           end
-           for _, obj in pairs(TabFolder:GetChildren()) do
-    obj.Visible = true
-end
-           GUI.CurrentTab = tab
-           for _, tabBtn in pairs(TabContainer:GetChildren()) do
-               if tabBtn:IsA("TextButton") then
-                   tabBtn.UIStroke.Transparency = 1
-               end
-           end
-           TabStroke.Transparency = 0
-       end
-	   end)
+TabButton.MouseButton1Click:Connect(function()
+    for _, tabFolder in pairs(ItemContainer:GetChildren()) do
+        tabFolder.Visible = false
+    end
+    
+    TabFolder.Visible = true
+    
+    for _, btn in pairs(TabContainer:GetChildren()) do
+        if btn:IsA("TextButton") then
+            btn.UIStroke.Transparency = 1
+        end
+    end
+    
+    TabStroke.Transparency = 0
+    GUI.CurrentTab = tab
+end)
 
 function tab:CreateToggle(text, callback)
    local toggle = {Enabled = false}
