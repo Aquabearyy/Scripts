@@ -117,7 +117,7 @@ function Library:CreateWindow()
    Logo.BorderSizePixel = 0
    Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
    Logo.BackgroundTransparency = 1
-   Logo.Image = "rbxassetid://13387419794"
+   Logo.Image = "rbxassetid://93052521049443"
    Logo.Size = UDim2.new(0.02747, 0, 0.72006, 0)
    Logo.Position = UDim2.new(0.01617, 0, 0.14553, 0)
    Logo.Parent = TitleBar
@@ -190,6 +190,13 @@ function Library:CreateWindow()
        TabButtonCorner.CornerRadius = UDim.new(0, 999)
        TabButtonCorner.Parent = TabButton
        
+       local TabStroke = Instance.new("UIStroke")
+       TabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+       TabStroke.Thickness = 2.3
+       TabStroke.Color = Color3.fromRGB(255, 94, 94)
+       TabStroke.Transparency = 1
+       TabStroke.Parent = TabButton
+       
        local TabButtonAspect = Instance.new("UIAspectRatioConstraint")
        TabButtonAspect.AspectRatio = 2.33333
        TabButtonAspect.Parent = TabButton
@@ -207,6 +214,16 @@ function Library:CreateWindow()
            for _, obj in pairs(TabFolder:GetChildren()) do
                obj.Visible = true
            end
+           
+           for _, tabBtn in pairs(TabContainer:GetChildren()) do
+               TweenService:Create(tabBtn.UIStroke, TweenInfo.new(0.1), {
+                   Transparency = 1
+               }):Play()
+           end
+           
+           TweenService:Create(TabStroke, TweenInfo.new(0.1), {
+               Transparency = 0
+           }):Play()
        end)
        
        function tab:CreateToggle(text, callback)
@@ -227,7 +244,7 @@ function Library:CreateWindow()
                Status.BorderSizePixel = 0
                Status.BackgroundColor3 = text.Dot == "New" and Color3.fromRGB(0, 255, 128) or Color3.fromRGB(0, 255, 255)
                Status.Size = UDim2.new(0.01883, 0, 0.25, 0)
-               Status.Position = UDim2.new(0.245, 0, 0.4, 0)
+               Status.Position = UDim2.new(0.085, 0, 0.4, 0)
                Status.Parent = ToggleFrame
                
                local StatusCorner = Instance.new("UICorner")
@@ -260,18 +277,14 @@ function Library:CreateWindow()
            ToggleButtonCorner.CornerRadius = UDim.new(0, 999)
            ToggleButtonCorner.Parent = ToggleButton
            
-           local ToggleButtonAspect = Instance.new("UIAspectRatioConstraint")
-           ToggleButtonAspect.AspectRatio = 2.13816
-           ToggleButtonAspect.Parent = ToggleButton
-           
            local ToggleIndicator = Instance.new("Frame")
            ToggleIndicator.BorderSizePixel = 0
-           ToggleIndicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-           ToggleIndicator.Size = UDim2.new(0.4, 0, 0.8, 0)
-           ToggleIndicator.Position = UDim2.new(0.169, 0, 0.099, 0)
-           ToggleIndicator.Parent = ToggleButton
-           
-           local ToggleIndicatorCorner = Instance.new("UICorner")
+ToggleIndicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ToggleIndicator.Size = UDim2.new(0.4, 0, 0.8, 0)
+ToggleIndicator.Position = UDim2.new(0.169, 0, 0.099, 0)
+ToggleIndicator.Parent = ToggleButton
+
+local ToggleIndicatorCorner = Instance.new("UICorner")
 ToggleIndicatorCorner.CornerRadius = UDim.new(0, 999)
 ToggleIndicatorCorner.Parent = ToggleIndicator
 
@@ -307,7 +320,7 @@ function tab:CreateButton(text, callback)
        Status.BorderSizePixel = 0
        Status.BackgroundColor3 = text.Dot == "New" and Color3.fromRGB(0, 255, 128) or Color3.fromRGB(0, 255, 255)
        Status.Size = UDim2.new(0.01883, 0, 0.25, 0)
-       Status.Position = UDim2.new(0.245, 0, 0.4, 0)
+       Status.Position = UDim2.new(0.085, 0, 0.4, 0)
        Status.Parent = ButtonFrame
        
        local StatusCorner = Instance.new("UICorner")
@@ -350,7 +363,7 @@ function tab:CreateKeybind(text, default, callback)
        Status.BorderSizePixel = 0
        Status.BackgroundColor3 = text.Dot == "New" and Color3.fromRGB(0, 255, 128) or Color3.fromRGB(0, 255, 255)
        Status.Size = UDim2.new(0.01883, 0, 0.25, 0)
-       Status.Position = UDim2.new(0.245, 0, 0.4, 0)
+       Status.Position = UDim2.new(0.085, 0, 0.4, 0)
        Status.Parent = KeybindFrame
        
        local StatusCorner = Instance.new("UICorner")
