@@ -21,8 +21,6 @@ function WebSocket.connect(url)
     }
 end
 
-
-
 local metatables = {}
 
 local rsetmetatable = setmetatable
@@ -43,7 +41,6 @@ setrawmetatable = function(taaable, newmt)
     return taaable
 end
 
-
 local hiddenProperties = {}
 function sethiddenproperty(obj, property, value)
     if not obj or type(property) ~= "string" then
@@ -62,15 +59,16 @@ function gethiddenproperty(obj, property)
     local isHidden = true
     return value or (property == "size_xml" and 5), isHidden
 end
+
 function hookmetamethod(t, index, func)
-	assert(type(t) == "table" or type(t) == "userdata", "invalid argument #1 to 'hookmetamethod' (table or userdata expected, got " .. type(t) .. ")", 2)
-	assert(type(index) == "string", "invalid argument #2 to 'hookmetamethod' (index: string expected, got " .. type(t) .. ")", 2)
-	assert(type(func) == "function", "invalid argument #3 to 'hookmetamethod' (function expected, got " .. type(t) .. ")", 2)
-	local o = t
-	local mt = Xeno.debug.getmetatable(t)
-	mt[index] = func
-	t = mt
-	return o
+    assert(type(t) == "table" or type(t) == "userdata", "invalid argument #1 to 'hookmetamethod' (table or userdata expected, got " .. type(t) .. ")", 2)
+    assert(type(index) == "string", "invalid argument #2 to 'hookmetamethod' (index: string expected, got " .. type(t) .. ")", 2)
+    assert(type(func) == "function", "invalid argument #3 to 'hookmetamethod' (function expected, got " .. type(t) .. ")", 2)
+    local o = t
+    local mt = Xeno.debug.getmetatable(t)
+    mt[index] = func
+    t = mt
+    return o
 end
 
 hookmetamethod = function(obj, tar, rep)
@@ -79,6 +77,7 @@ hookmetamethod = function(obj, tar, rep)
     meta[tar] = rep
     return save
 end
+
 function debug.getproto(f, index, mock)
     local proto_func = function() return true end  
     if mock then
@@ -96,6 +95,7 @@ function debug.getconstant(func, index)
     }
     return constants[index]
 end
+
 function debug.getupvalues(func)
     local founded
     setfenv(func, {print = function(funcc) founded = funcc end})
@@ -110,29 +110,6 @@ function debug.getupvalue(func, num)
     return founded
 end
 
-local file = readfile("configs/Config.txt") 
-if file then
-    local ua = file:match("([^\r\n]+)") 
-    if ua then
-        local uas = ua .. "/cxapi" 
-        local oldr = request 
-        getgenv().request = function(options)
-            if options.Headers then
-                options.Headers["User-Agent"] = uas
-            else
-                options.Headers = {["User-Agent"] = uas}
-            end
-            local response = oldr(options)
-            return response
-        end
-        
-    else
-        error("failed to load config")
-    end
-else
-    error("Failed to open config")
-end
 function printidentity()
-	print("Current identity is 6")
-
+    print("Current identity is 7")
 end
