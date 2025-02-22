@@ -108,6 +108,36 @@ debug.getupvalue = function(func, index)
     return value
 end
 
+local oldsm = setmetatable
+local savedmts = {}
+
+setmetatable = function(taaable, metatable)
+    local success, result = pcall(function() local result = oldsm(taaable, metatable) end)
+    savedmts[taaable] = metatable
+    if not success then error(result) end
+    return taaable
+end
+
+function getrawmetatable(taaable)
+    return savedmts[taaable]
+end
+
+function setrawmetatable(taaable, newmt)
+    local currentmt = getrawmetatable(taaable)
+    table.foreach(newmt, function(key, value)
+        currentmt[key] = value
+    end)
+    return taaable
+end
+
+function hookmetamethod(lr, method, newmethod)
+    local rawmetatable = getrawmetatable(lr)
+    local old = rawmetatable[method]
+    rawmetatable[method] = newmethod
+    setrawmetatable(lr, rawmetatable)
+    return old
+end
+
 local originalTable = table
 table = originalTable.clone(originalTable)
 table.freeze = function(t, recursive) end
