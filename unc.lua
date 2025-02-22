@@ -66,7 +66,7 @@ function gethiddenproperty(object, propertyName)
 end
 
 function hookmetamethod(object, methodName, newFunction)
-    local metatable = getgenv().getrawmetatable(object)
+    local metatable = getrawmetatable(object)
     local originalMethod = metatable[methodName]
     metatable[methodName] = newFunction
     return originalMethod
@@ -106,36 +106,6 @@ debug.getupvalue = function(func, index)
     })
     func()
     return value
-end
-
-local oldsm = setmetatable
-local savedmts = {}
-
-setmetatable = function(taaable, metatable)
-    local success, result = pcall(function() local result = oldsm(taaable, metatable) end)
-    savedmts[taaable] = metatable
-    if not success then error(result) end
-    return taaable
-end
-
-function getrawmetatable(taaable)
-    return savedmts[taaable]
-end
-
-function setrawmetatable(taaable, newmt)
-    local currentmt = getrawmetatable(taaable)
-    table.foreach(newmt, function(key, value)
-        currentmt[key] = value
-    end)
-    return taaable
-end
-
-function hookmetamethod(lr, method, newmethod)
-    local rawmetatable = getrawmetatable(lr)
-    local old = rawmetatable[method]
-    rawmetatable[method] = newmethod
-    setrawmetatable(lr, rawmetatable)
-    return old
 end
 
 local originalTable = table
@@ -184,4 +154,13 @@ Instance.new = function(className, parent)
     else
         return originalInstance.new(className, parent)
     end
+end
+
+local originalRequest = request or http_request
+request = function(options)
+   if not options.Headers then
+       options.Headers = {}
+   end
+   options.Headers["User-Agent"] = "BEAR/RobloxApp/2.0.0"
+   return originalRequest(options)
 end
