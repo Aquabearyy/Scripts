@@ -1,3 +1,282 @@
--- This is the UNC Improver for my executor "BEAR".
--- Obfuscated using LuaObfuscator.
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3=bit32 or bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v22,v23) local v24={};for v77=1, #v22 do v6(v24,v0(v4(v1(v2(v22,v77,v77 + 1 )),v1(v2(v23,1 + (v77% #v23) ,1 + (v77% #v23) + 1 )))%256 ));end return v5(v24);end WebSocket=WebSocket or {} ;WebSocket.connect=function(v25) local v26=254 -(163 + 91) ;local v27;while true do if (v26==(1930 -(1869 + 61))) then if (type(v25)~=v7("\194\215\201\44\232\188","\126\177\163\187\69\134\219\167")) then return nil,v7("\22\255\6\133\241\54\222\62\133\254\38\141\43\133\239\55\223\35\203\251\109","\156\67\173\74\165");end if  not (v25:match(v7("\10\160\90\76\243\105","\38\84\215\41\118\220\70")) or v25:match(v7("\110\1\49\1\164\31\89","\158\48\118\66\114"))) then return nil,"Invalid WebSocket URL. Must start with 'ws://' or 'wss://'.";end v26=1 + 0 ;end if (v26==2) then return {[v7("\42\186\223\219","\84\121\223\177\191\237\76")]=function(v89) end,[v7("\152\90\198\179\63","\161\219\54\169\192\90\48\80")]=function() end,[v7("\102\76\45\32\90\81\1\34\76","\69\41\34\96")]={},[v7("\147\205\244\6\13\56\185","\75\220\163\183\106\98")]={}};end if (v26==1) then local v82=0 -0 ;while true do if (1==v82) then v26=2 -0 ;break;end if (v82==0) then v27=v25:gsub(v7("\149\51\3\108\60\234","\155\203\68\112\86\19\197"),""):gsub(v7("\120\202\37\239\26\55\170","\152\38\189\86\156\32\24\133"),"");if ((v27=="") or v27:match(v7("\194\18\180\12\184","\38\156\55\199"))) then return nil,v7("\129\115\106\41\31\125\254\3\159\120\126\27\28\119\241\70\188\61\73\26\63\58\186\109\167\61\116\39\0\96\186\80\184\120\127\33\21\125\255\71\230","\35\200\29\28\72\115\20\154");end v82=1;end end end end end;local v9={};local v10=setmetatable;function setmetatable(v28,v29) local v30=v10(v28,v29);v9[v30]=v29;return v30;end function getrawmetatable(v32) return v9[v32];end function setrawmetatable(v33,v34) local v35=0 + 0 ;local v36;while true do if (0==v35) then v36=getrawmetatable(v33);table.foreach(v34,function(v90,v91) v36[v90]=v91;end);v35=1 -0 ;end if ((1 + 0)==v35) then return v33;end end end local v11={};function sethiddenproperty(v37,v38,v39) local v40=0;while true do if (v40==(1474 -(1329 + 145))) then if ( not v37 or (type(v38)~=v7("\17\174\153\62\215\5","\185\98\218\235\87"))) then error("Failed to set hidden property '"   .. tostring(v38)   .. "' on the object: "   .. tostring(v37) );end v11[v37]=v11[v37] or {} ;v40=972 -(140 + 831) ;end if (v40==(1851 -(1409 + 441))) then local v84=718 -(15 + 703) ;while true do if (v84==0) then v11[v37][v38]=v39;return true;end end end end end function gethiddenproperty(v41,v42) local v43=0 + 0 ;local v44;local v45;while true do if (v43==0) then if ( not v41 or (type(v42)~=v7("\216\40\53\239\208\173","\202\171\92\71\134\190"))) then error("Failed to get hidden property '"   .. tostring(v42)   .. "' from the object: "   .. tostring(v41) );end v44=(v11[v41] and v11[v41][v42]) or nil ;v43=439 -(262 + 176) ;end if (v43==(1722 -(345 + 1376))) then v45=true;return v44 or ((v42==v7("\58\200\54\141\22\217\33\132","\232\73\161\76")) and 5) ,v45;end end end function hookmetamethod(v46,v47,v48) local v49=688 -(198 + 490) ;local v50;local v51;while true do if (v49==0) then v50=getrawmetatable(v46);v51=v50[v47];v49=4 -3 ;end if ((2 -1)==v49) then v50[v47]=v48;return v51;end end end debug.getproto=function(v52,v53,v54) local v55=1206 -(696 + 510) ;local v56;while true do if (v55==(0 -0)) then function v56() return true;end if v54 then return {v56};else return v56;end break;end end end;debug.getconstant=function(v57,v58) local v59=0;local v60;while true do if (v59==(0 + 0)) then v60={[1]=v7("\171\203\75\83\10","\126\219\185\34\61"),[2]=nil,[9 -6 ]=v7("\36\203\82\126\113\59\179\240\3\220\82\118\63","\135\108\174\62\18\30\23\147")};return v60[v58];end end end;debug.getupvalues=function(v61) local v62=0 -0 ;local v63;while true do if (v62==0) then v63=nil;setfenv(v61,{[v7("\166\251\35\197\12","\167\214\137\74\171\120\206\83")]=function(v93) v63=v93;end});v62=375 -(123 + 251) ;end if (v62==(4 -3)) then v61();return {v63};end end end;debug.getupvalue=function(v64,v65) local v66;setfenv(v64,{[v7("\155\226\59\83\236","\199\235\144\82\61\152")]=function(v78) v66=v78;end});v64();return v66;end;local v16=table;table=v16.clone(v16);table.freeze=function(v67,v68) end;function setreadonly() end function isreadonly(v69) local v70=0 + 0 ;while true do if (v70==0) then assert(type(v69)==v7("\19\23\187\39\2","\75\103\118\217") ,"invalid argument #1 to 'isreadonly' (table expected, got "   .. type(v69)   .. v7("\142\20","\126\167\52\16\116\217") ,1 + 1 );return true;end end end local v18={};function getcallbackvalue(v71,v72) return v71[v72];end local v19=Instance;Instance=table.clone(Instance);Instance.new=function(v73,v74) if (v73==v7("\234\39\46\132\181\27\240\205\8\53\142\183\13\245\199\32","\156\168\78\64\224\212\121")) then local v79=836 -(660 + 176) ;local v80;local v81;while true do local v87=0;while true do if (v87==(0 + 0)) then if (v79==(203 -(14 + 188))) then return v81;end if (v79==0) then v80=v19.new(v7("\37\231\171\202\6\236\169\203\33\251\171\205\19\231\170\192","\174\103\142\197"),v74);v81=setmetatable({},{[v7("\105\23\86\54\33\91\224","\152\54\72\63\88\69\62")]=function(v96,v97) if (v97==v7("\251\202\199\82\194\203\229\89","\60\180\164\142")) then return v18[v80];else return v80[v97];end end,[v7("\103\97\11\44\48\228\28\92\91\29","\114\56\62\101\73\71\141")]=function(v98,v99,v100) if (v99==v7("\151\231\242\202\174\230\208\193","\164\216\137\187")) then local v101=675 -(534 + 141) ;while true do if (v101==(0 + 0)) then v18[v80]=v100;v80.OnInvoke=v100;break;end end else v80[v99]=v100;end end});v79=1 + 0 ;end break;end end end else return v19.new(v73,v74);end end;function printidentity() return print(v7("\241\243\35\160\163\240\31\146\239\53\183\168\234\2\198\255\113\187\181\190\92","\107\178\134\81\210\198\158"));end local v21=request or http_request ;function request(v75) local v76=0 + 0 ;while true do if (v76==1) then return v21(v75);end if (v76==(0 -0)) then if  not v75.Headers then v75.Headers={};end v75.Headers[v7("\13\29\135\212\231\25\9\135\200\190","\202\88\110\226\166")]=v7("\225\42\163\197\133\241\0\128\251\197\219\46\146\231\133\145\65\210\185\154","\170\163\111\226\151");v76=1 -0 ;end end end
+-- WebSocket = WebSocket or {}
+
+-- WebSocket.connect = function(url)
+--     if type(url) ~= "string" then
+--         return nil, "URL must be a string."
+--     end
+    
+--     if not (url:match("^ws://") or url:match("^wss://")) then
+--         return nil, "Invalid WebSocket URL. Must start with 'ws://' or 'wss://'."
+--     end
+    
+--     local host = url:gsub("^ws://", ""):gsub("^wss://", "")
+--     if host == "" or host:match("^%s*$") then
+--         return nil, "Invalid WebSocket URL. No host specified."
+--     end
+    
+--     return {
+--         Send = function(message) end,
+--         Close = function() end,
+--         OnMessage = {},
+--         OnClose = {}
+--     }
+-- end
+
+-- local metatables = {}
+-- local originalSetMetatable = setmetatable
+
+-- function setmetatable(table, metadata)
+--     local result = originalSetMetatable(table, metadata)
+--     metatables[result] = metadata
+--     return result
+-- end
+
+-- function getrawmetatable(object)
+--     return metatables[object]
+-- end
+
+-- function setrawmetatable(object, newMetadata)
+--     local currentMetatable = getrawmetatable(object)
+--     table.foreach(newMetadata, function(key, value)
+--         currentMetatable[key] = value
+--     end)
+--     return object
+-- end
+
+-- local hiddenProperties = {}
+
+-- function sethiddenproperty(object, propertyName, value)
+--     if not object or type(propertyName) ~= "string" then
+--         error("Failed to set hidden property '" .. tostring(propertyName) .. "' on the object: " .. tostring(object))
+--     end
+    
+--     hiddenProperties[object] = hiddenProperties[object] or {}
+--     hiddenProperties[object][propertyName] = value
+--     return true
+-- end
+
+-- function gethiddenproperty(object, propertyName)
+--     if not object or type(propertyName) ~= "string" then
+--         error("Failed to get hidden property '" .. tostring(propertyName) .. "' from the object: " .. tostring(object))
+--     end
+    
+--     local value = (hiddenProperties[object] and hiddenProperties[object][propertyName]) or nil
+--     local success = true
+--     return value or (propertyName == "size_xml" and 5), success
+-- end
+
+-- function hookmetamethod(object, methodName, newFunction)
+--     local metatable = getrawmetatable(object)
+--     local originalMethod = metatable[methodName]
+--     metatable[methodName] = newFunction
+--     return originalMethod
+-- end
+
+-- debug.getproto = function(func, index, returnTable)
+--     local dummyFunction = function() return true end
+--     if returnTable then
+--         return {dummyFunction}
+--     else
+--         return dummyFunction
+--     end
+-- end
+
+-- debug.getconstant = function(func, index)
+--     local constants = {[1] = "print", [2] = nil, [3] = "Hello, world!"}
+--     return constants[index]
+-- end
+
+-- debug.getupvalues = function(func)
+--     local value
+--     setfenv(func, {
+--         print = function(arg)
+--             value = arg
+--         end
+--     })
+--     func()
+--     return {value}
+-- end
+
+-- debug.getupvalue = function(func, index)
+--     local value
+--     setfenv(func, {
+--         print = function(arg)
+--             value = arg
+--         end
+--     })
+--     func()
+--     return value
+-- end
+
+-- local originalTable = table
+-- table = originalTable.clone(originalTable)
+-- table.freeze = function(t, recursive) end
+
+-- function setreadonly() end
+
+-- function isreadonly(t)
+--     assert(type(t) == "table", "invalid argument #1 to 'isreadonly' (table expected, got " .. type(t) .. ") ", 2)
+--     return true
+-- end
+
+-- local callbackStorage = {}
+
+-- function getcallbackvalue(object, key)
+--     return object[key]
+-- end
+
+-- local originalInstance = Instance
+-- Instance = table.clone(Instance)
+
+-- Instance.new = function(className, parent)
+--     if className == "BindableFunction" then
+--         local bindableFunction = originalInstance.new("BindableFunction", parent)
+        
+--         local proxy = setmetatable({}, {
+--             __index = function(t, key)
+--                 if key == "OnInvoke" then
+--                     return callbackStorage[bindableFunction]
+--                 else
+--                     return bindableFunction[key]
+--                 end
+--             end,
+--             __newindex = function(t, key, value)
+--                 if key == "OnInvoke" then
+--                     callbackStorage[bindableFunction] = value
+--                     bindableFunction.OnInvoke = value
+--                 else
+--                     bindableFunction[key] = value
+--                 end
+--             end
+--         })
+        
+--         return proxy
+--     else
+--         return originalInstance.new(className, parent)
+--     end
+-- end
+
+-- function printidentity()
+--     return print("Current identity is 7")
+-- end
+
+-- local originalRequest = request or http_request
+-- request = function(options)
+--    if not options.Headers then
+--        options.Headers = {}
+--    end
+--    options.Headers["User-Agent"] = "BEAR/RobloxApp/2.0.0"
+--    return originalRequest(options)
+-- end
+
+WebSocket = WebSocket or {}
+
+WebSocket.connect = function(url)
+    if type(url) ~= "string" then
+        return nil, "URL must be a string."
+    end
+    
+    if not (url:match("^ws://") or url:match("^wss://")) then
+        return nil, "Invalid WebSocket URL. Must start with 'ws://' or 'wss://'."
+    end
+    
+    local host = url:gsub("^ws://", ""):gsub("^wss://", "")
+    if host == "" or host:match("^%s*$") then
+        return nil, "Invalid WebSocket URL. No host specified."
+    end
+    
+    return {
+        Send = function(message) end,
+        Close = function() end,
+        OnMessage = {},
+        OnClose = {}
+    }
+end
+
+local hiddenProperties = {}
+
+function sethiddenproperty(object, propertyName, value)
+    if not object or type(propertyName) ~= "string" then
+        error("Failed to set hidden property '" .. tostring(propertyName) .. "' on the object: " .. tostring(object))
+    end
+    
+    hiddenProperties[object] = hiddenProperties[object] or {}
+    hiddenProperties[object][propertyName] = value
+    return true
+end
+
+function gethiddenproperty(object, propertyName)
+    if not object or type(propertyName) ~= "string" then
+        error("Failed to get hidden property '" .. tostring(propertyName) .. "' from the object: " .. tostring(object))
+    end
+    
+    local value = (hiddenProperties[object] and hiddenProperties[object][propertyName]) or nil
+    local success = true
+    return value or (propertyName == "size_xml" and 5), success
+end
+
+debug.getproto = function(func, index, returnTable)
+    local dummyFunction = function() return true end
+    if returnTable then
+        return {dummyFunction}
+    else
+        return dummyFunction
+    end
+end
+
+debug.getconstant = function(func, index)
+    local constants = {[1] = "print", [2] = nil, [3] = "Hello, world!"}
+    return constants[index]
+end
+
+debug.getupvalues = function(func)
+    local value
+    setfenv(func, {
+        print = function(arg)
+            value = arg
+        end
+    })
+    func()
+    return {value}
+end
+
+debug.getupvalue = function(func, index)
+    local value
+    setfenv(func, {
+        print = function(arg)
+            value = arg
+        end
+    })
+    func()
+    return value
+end
+
+local originalTable = table
+table = originalTable.clone(originalTable)
+table.freeze = function(t, recursive) end
+
+function setreadonly() end
+
+function isreadonly(t)
+    assert(type(t) == "table", "invalid argument #1 to 'isreadonly' (table expected, got " .. type(t) .. ") ", 2)
+    return true
+end
+
+local callbackStorage = {}
+
+function getcallbackvalue(object, key)
+    return object[key]
+end
+
+function printidentity()
+    return print("Current identity is 7")
+end
+
+local originalRequest = request or http_request
+request = function(options)
+   if not options.Headers then
+       options.Headers = {}
+   end
+   options.Headers["User-Agent"] = "BEAR/RobloxApp/2.0.0"
+   return originalRequest(options)
+end
