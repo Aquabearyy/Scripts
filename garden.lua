@@ -110,40 +110,15 @@ local function verifyFarmOwnership()
     return true
 end
 
-sections.MainSection:Button({
-    Name = "Copy Farm Path to Clipboard",
-    Callback = function()
-        if not farmIndexValue then
-            farmIndexValue = findPlayerFarmIndex()
-        end
-        
-        if farmIndexValue then
-            local path = "workspace.Farm:GetChildren()[" .. farmIndexValue .. "].Important.Data.Owner"
-            setclipboard(path)
-            
-            Window:Notify({
-                Title = "Success",
-                Description = "Farm path copied to clipboard: " .. path,
-                Lifetime = 5
-            })
-        else
-            Window:Notify({
-                Title = "Error",
-                Description = "Couldn't find your farm",
-                Lifetime = 5
-            })
-        end
-    end,
-})
-
 sections.MainSection:Divider()
 
 sections.MainSection:Header({
     Name = "Auto Collector"
 })
 
-local autoCollectConnection = nil
-local collectionCooldown = 1
+local collectionCooldown = 0.1
+local autoCollectActive = false
+local autoCollectThread = nil
 
 sections.MainSection:Slider({
     Name = "Collection Cooldown",
@@ -178,7 +153,7 @@ local function collectPlants()
     if not plantsFolder then return end
     
     for _, plant in pairs(plantsFolder:GetDescendants()) do
-        if plant:IsA("ProximityPrompt") then
+        if plant:IsA("ProximityPrompt") and autoCollectActive then
             local parentPart = plant.Parent
             if parentPart and parentPart:IsA("BasePart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = parentPart.CFrame + Vector3.new(0, 3, 0)
@@ -194,6 +169,8 @@ sections.MainSection:Toggle({
     Name = "Auto Collect Plants",
     Default = false,
     Callback = function(value)
+        autoCollectActive = value
+        
         if value then
             if not farmIndexValue then
                 farmIndexValue = findPlayerFarmIndex()
@@ -203,6 +180,7 @@ sections.MainSection:Toggle({
                         Description = "Couldn't find your farm",
                         Lifetime = 5
                     })
+                    autoCollectActive = false
                     return
                 end
             end
@@ -213,21 +191,21 @@ sections.MainSection:Toggle({
                 Lifetime = 5
             })
             
-            if autoCollectConnection then
-                autoCollectConnection:Disconnect()
+            if autoCollectThread then
+                task.cancel(autoCollectThread)
             end
             
-            spawn(function()
-                while true do
-                    if not getgenv().AutoCollecting then break end
+            autoCollectThread = task.spawn(function()
+                while autoCollectActive do
                     collectPlants()
-                    wait(1)
+                    task.wait(0.5)
                 end
             end)
-            
-            getgenv().AutoCollecting = true
         else
-            getgenv().AutoCollecting = false
+            if autoCollectThread then
+                task.cancel(autoCollectThread)
+                autoCollectThread = nil
+            end
             
             Window:Notify({
                 Title = "Auto Collect",
