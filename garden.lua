@@ -133,7 +133,6 @@ sections.MainSection:Slider({
 })
 
 local freezeRootPartToggle = nil
-local freezeRootPart = false
 
 local function collectPlants()
     if not farmIndexValue then return end
@@ -154,14 +153,19 @@ local function collectPlants()
         if plant:IsA("ProximityPrompt") and autoCollectActive then
             local parentPart = plant.Parent
             if parentPart and parentPart:IsA("BasePart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                if freezeRootPart and not LocalPlayer.Character.HumanoidRootPart.Anchored then
-                    LocalPlayer.Character.HumanoidRootPart.Anchored = true
-                end
+                -- Anchor the character
+                LocalPlayer.Character.HumanoidRootPart.Anchored = true
                 
+                -- Teleport to the plant
                 LocalPlayer.Character.HumanoidRootPart.CFrame = parentPart.CFrame + Vector3.new(0, 3, 0)
                 wait(0.2)
-                fireproximityprompt(plant)
+                
+                -- Simulate holding E key
+                keypress(0x45) -- E key
                 wait(collectionCooldown)
+                keyrelease(0x45) -- Release E key
+                
+                wait(0.1)
             end
         end
     end
@@ -193,38 +197,9 @@ sections.MainSection:Toggle({
                 Lifetime = 5
             })
             
-            if freezeRootPartToggle then
-                freezeRootPartToggle.Visible = true
-            else
-                freezeRootPartToggle = sections.MainSection:Toggle({
-                    Name = "Freeze Character",
-                    Default = false,
-                    Callback = function(value)
-                        freezeRootPart = value
-                        
-                        if value then
-                            Window:Notify({
-                                Title = "Character",
-                                Description = "Character frozen",
-                                Lifetime = 3
-                            })
-                            
-                            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                                LocalPlayer.Character.HumanoidRootPart.Anchored = true
-                            end
-                        else
-                            Window:Notify({
-                                Title = "Character",
-                                Description = "Character unfrozen",
-                                Lifetime = 3
-                            })
-                            
-                            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                                LocalPlayer.Character.HumanoidRootPart.Anchored = false
-                            end
-                        end
-                    end,
-                })
+            -- Automatically anchor character when auto-collect is enabled
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.Anchored = true
             end
             
             if autoCollectThread then
@@ -243,15 +218,9 @@ sections.MainSection:Toggle({
                 autoCollectThread = nil
             end
             
-            if freezeRootPartToggle then
-                freezeRootPartToggle.Visible = false
-                
-                if freezeRootPart then
-                    freezeRootPart = false
-                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        LocalPlayer.Character.HumanoidRootPart.Anchored = false
-                    end
-                end
+            -- Unanchor character when auto-collect is disabled
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.Anchored = false
             end
             
             Window:Notify({
