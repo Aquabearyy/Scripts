@@ -129,13 +129,11 @@ sections.MainSection:Slider({
     DisplayMethod = "Value",
     Callback = function(value)
         collectionCooldown = value
-        Window:Notify({
-            Title = "Auto Collect",
-            Description = "Cooldown set to " .. value .. " seconds",
-            Lifetime = 3
-        })
     end
 })
+
+local freezeRootPartToggle = nil
+local freezeRootPart = false
 
 local function collectPlants()
     if not farmIndexValue then return end
@@ -156,6 +154,10 @@ local function collectPlants()
         if plant:IsA("ProximityPrompt") and autoCollectActive then
             local parentPart = plant.Parent
             if parentPart and parentPart:IsA("BasePart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                if freezeRootPart and not LocalPlayer.Character.HumanoidRootPart.Anchored then
+                    LocalPlayer.Character.HumanoidRootPart.Anchored = true
+                end
+                
                 LocalPlayer.Character.HumanoidRootPart.CFrame = parentPart.CFrame + Vector3.new(0, 3, 0)
                 wait(0.2)
                 fireproximityprompt(plant)
@@ -191,6 +193,40 @@ sections.MainSection:Toggle({
                 Lifetime = 5
             })
             
+            if freezeRootPartToggle then
+                freezeRootPartToggle.Visible = true
+            else
+                freezeRootPartToggle = sections.MainSection:Toggle({
+                    Name = "Freeze Character",
+                    Default = false,
+                    Callback = function(value)
+                        freezeRootPart = value
+                        
+                        if value then
+                            Window:Notify({
+                                Title = "Character",
+                                Description = "Character frozen",
+                                Lifetime = 3
+                            })
+                            
+                            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                LocalPlayer.Character.HumanoidRootPart.Anchored = true
+                            end
+                        else
+                            Window:Notify({
+                                Title = "Character",
+                                Description = "Character unfrozen",
+                                Lifetime = 3
+                            })
+                            
+                            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                LocalPlayer.Character.HumanoidRootPart.Anchored = false
+                            end
+                        end
+                    end,
+                })
+            end
+            
             if autoCollectThread then
                 task.cancel(autoCollectThread)
             end
@@ -205,6 +241,17 @@ sections.MainSection:Toggle({
             if autoCollectThread then
                 task.cancel(autoCollectThread)
                 autoCollectThread = nil
+            end
+            
+            if freezeRootPartToggle then
+                freezeRootPartToggle.Visible = false
+                
+                if freezeRootPart then
+                    freezeRootPart = false
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        LocalPlayer.Character.HumanoidRootPart.Anchored = false
+                    end
+                end
             end
             
             Window:Notify({
