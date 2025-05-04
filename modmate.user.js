@@ -1,24 +1,44 @@
 // ==UserScript==
-// @name         DuoFarmer Minimal
-// @namespace    https://duo-farmer.vercel.app
-// @version      0.7
-// @description  Fast XP farming for Duolingo
-// @author       Modified Script
+// @name         ModMate
+// @namespace    https://modmatee.vercel.app
+// @version      0.8
+// @description  Fast XP farming for Duolingo with auto-update
+// @author       ModMate
 // @match        https://*.duolingo.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=duolingo.com
 // @grant        none
 // @license      none
+// @updateURL    https://github.com/Aquabearyy/Scripts/raw/refs/heads/main/modmate.user.js
+// @downloadURL  https://github.com/Aquabearyy/Scripts/raw/refs/heads/main/modmate.user.js
+// @supportURL   https://modmatee.vercel.app
 // ==/UserScript==
 
 (function() {
     'use strict';
-
+    
+    const scriptVersion = '0.8';
+    const scriptName = 'ModMate';
     const sessionUrl = "https://www.duolingo.com/2017-06-30/sessions";
     let isFarming = false;
     let isVisible = true;
     let xpGained = 0;
     let totalSessionsDone = 0;
     let concurrentRequests = 10;
+
+    const checkForUpdates = async () => {
+        try {
+            const statusElement = document.getElementById("_loginStatus");
+            if (statusElement) {
+                statusElement.innerHTML += `<br/><small>Version ${scriptVersion}</small>`;
+            }
+            
+            console.log(`${scriptName} v${scriptVersion} loaded successfully`);
+            console.log('Auto-updates enabled through userscript manager');
+            console.log('Support website: https://modmatee.vercel.app');
+        } catch (error) {
+            console.error("Error checking for updates:", error);
+        }
+    };
 
     const getJwtToken = () => document.cookie.split(';').find(c => c.trim().startsWith('jwt_token='))?.split('=')[1] || null;
 
@@ -139,7 +159,7 @@
         const duoFarmerHTML = `
             <div class="_container" id="_container">
                 <div class="_header">
-                    <p class="_title">DuoFarmer Minimal</p>
+                    <p class="_title">${scriptName}</p>
                 </div>
                 <div class="_description">
                     <p id="_loginStatus">Checking login...</p>
@@ -154,7 +174,7 @@
             <button class="_toggleBtn" id="_toggleBtn">→</button>
             <div class="_overlay" id="_loadingOverlay">
                 <div class="_swalModal">
-                    <h2>DuoFarmer</h2>
+                    <h2>${scriptName}</h2>
                     <div class="_spinner"></div>
                     <div class="_xpInfo">+ <span id="_xpAmount">0</span> XP</div>
                     <button id="_stopBtn">Stop</button>
@@ -347,6 +367,8 @@
 
     const initDuoFarmer = async () => {
         createUserInterface();
+        
+        await checkForUpdates();
 
         const JWT = getJwtToken();
         if (!JWT) {
@@ -363,6 +385,7 @@
 
             document.getElementById("_loginStatus").innerHTML = `
                 <strong>${username}</strong> | ${learningLanguage}
+                <br/><small>Version ${scriptVersion}</small>
             `;
 
             const sessionPayload = {
